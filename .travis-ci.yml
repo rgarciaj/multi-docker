@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t ricardogj/react-test -f ./client/Dockerfile-dev ./client
+
+script:
+  - docker run ricardofj/react-test npm test
+
+after_success:
+  - docker build -t ricardogj/multi-client ./client
+  - docker build -t ricardogj/multi-nginx ./nginx
+  - docker build -t ricardogj/multi-server ./server  
+  - docker build -t ricardogj/multi-worker ./worker
+  # Log in to the Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker -login -u "$DOCKER_ID" --password-stdin
+  # Upload images to Docker Hub
+  - docker push ricardogj/multi-clien
+  - docker push ricardogj/multi-nginx
+  - docker push ricardogj/multi-server
+  - docker push ricardogj/multi-worker
