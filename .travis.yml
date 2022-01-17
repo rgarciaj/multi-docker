@@ -6,7 +6,7 @@ before_install:
   - docker build -t ricardogj/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run ricardofj/react-test npm test
+  - docker run ricardogj/react-test npm test
 
 after_success:
   - docker build -t ricardogj/multi-client ./client
